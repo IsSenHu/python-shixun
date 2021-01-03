@@ -25,3 +25,10 @@ while i < 10:
 # 打印九九乘法表
 x = 1
 y = 1
+while x <= 9:
+    while y <= x:
+        print("%d * %d = %d" % (y, x, x * y), end="\t")
+        y += 1
+    print("")
+    y = 1
+    x += 1
