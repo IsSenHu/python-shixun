@@ -5,13 +5,21 @@
 # @Software : IntelliJ IDEA
 
 import re
+import urllib.error
+import urllib.request
+
 from bs4 import BeautifulSoup
-import urllib.request, urllib.error
-import xlwt
-import sqlite3
 
 base_url = "https://movie.douban.com/top250"
 start = 0
+find_link = re.compile(r'<a href="(.*?)">')    # 创建正则表达式对象，表示规则
+find_img_src = re.compile(r'class="" src="(.*?)" width="100"/>', re.S)  # re.S 让换行符包含在字符中
+find_title = re.compile(r'<span class="title">(.*)</span>')
+find_other = re.compile(r'<span class="other">(.*)</span>')
+find_rating = re.compile(r'<span class="rating_num" property="v:average">(.*)</span>')
+find_judge = re.compile(r'<span>(\d*)人评价</span>')
+find_inq = re.compile(r'<span class="inq">(.*)</span>')
+find_bd = re.compile(r'<p class="">(.*?)</p>', re.S)
 
 
 # 得到指定一个URL的网页内容
@@ -49,7 +57,32 @@ def get_data(base_url):
         # NavigableString   标签里的内容（字符串）
         # BeautifulSoup     表示整个文档
         # Comment           是一个特殊的NavigableString，输出的内容不包含注释符号
-        bs = BeautifulSoup(html, "html.parser")
+        soup = BeautifulSoup(html, "html.parser")
+        for item in soup.find_all("div", class_="item"):
+            # print(item)
+            data = []
+            item = str(item)
+            # 获取到影片详情的连接
+            link = re.findall(find_link, item)[0]
+            data.append(link)
+            img_src = re.findall(find_img_src, item)[0]
+            data.append(img_src)
+            titles = re.findall(find_title, item)
+            data.append(titles)
+            other = re.findall(find_other, item)[0]
+            data.append(other)
+            rating = re.findall(find_rating, item)[0]
+            data.append(rating)
+            judge = re.findall(find_judge, item)[0]
+            data.append(judge)
+            inq = re.findall(find_inq, item)
+            if inq:
+                data.append(inq[0])
+            else:
+                data.append(" ")
+            bd = re.findall(find_bd, item)[0]
+            data.append(bd.strip())
+            data_list.append(data)
         # print(type(bs.head))
         # print(type(bs.title.string))
         # print(bs.a.attrs)   # 获取标签的属性
@@ -101,10 +134,8 @@ def get_data(base_url):
 
 
 def main():
-    get_data("https://movie.douban.com/top250?start=")
-    # 爬取网页
-    # 解析数据
-    # 保存数据
+    data_list = get_data("https://movie.douban.com/top250?start=")
+    print(data_list)
 
 
 if __name__ == '__main__':
