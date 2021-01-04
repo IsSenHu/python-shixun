@@ -12,31 +12,31 @@ def 函数名()
 
 
 # 函数的定义
-def printInfo():
+def print_info():
     print("-" * 20)
     print("人生苦短，我用Python")
     print("-" * 20)
 
 
-printInfo()
-printInfo()
+print_info()
+print_info()
 
 
 # 带参数的函数
-def add2Num(a, b):
+def add_2_num(a, b):
     c = a + b
     print(c)
 
 
-add2Num(11, 11)
+add_2_num(11, 11)
 
 
 # 带返回值的函数
-def addNum(a, b):
+def add_num(a, b):
     return a + b
 
 
-print(addNum(9, 9))
+print(add_num(9, 9))
 
 
 # 返回多个值的函数
@@ -48,6 +48,7 @@ def dived(a, b):
 
 s, y = dived(5, 2)
 print("商: %d, 余数: %d" % (s, y))
+print(f"商:{s}, 余数: {y}")
 
 # 全局变量和局部变量相同名字
 a = 100
@@ -72,3 +73,6 @@ test1()
 test2()
 test3()
 test2()
+
+if __name__ == '__main__':
+    print("hello world")
